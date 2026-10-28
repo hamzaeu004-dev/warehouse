@@ -1,0 +1,14 @@
+{
+    "name": "Warehouse Inventory",
+    "short_name": "Warehouse",
+    "description": "Weekly purchases, branch invoices and stock for the restaurant warehouse",
+    "start_url": "/",
+    "scope": "/",
+    "display": "standalone",
+    "orientation": "portrait",
+    "background_color": "#f1f5f9",
+    "theme_color": "#115e59",
+    "icons": [
+        { "src": "/icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }
+    ]
+}
