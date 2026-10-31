@@ -9,6 +9,7 @@ use App\Models\Item;
 use App\Models\User;
 use App\Services\StockService;
 use Database\Seeders\DatabaseSeeder;
+use Database\Seeders\SampleDataSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Validation\ValidationException;
 use Livewire\Livewire;
@@ -21,7 +22,7 @@ class BatchKgGramTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->seed(DatabaseSeeder::class);
+        $this->seed([DatabaseSeeder::class, SampleDataSeeder::class]);
     }
 
     public function test_kg_item_used_in_grams_converts_correctly(): void

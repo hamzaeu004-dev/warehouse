@@ -9,6 +9,7 @@ use App\Models\User;
 use App\Services\ProfitReport;
 use App\Services\StockService;
 use Database\Seeders\DatabaseSeeder;
+use Database\Seeders\SampleDataSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Carbon;
 use Livewire\Livewire;
@@ -21,7 +22,7 @@ class AnalysisTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->seed(DatabaseSeeder::class);
+        $this->seed([DatabaseSeeder::class, SampleDataSeeder::class]);
         $this->actingAs(User::first());
         // Saturday 24 Oct 2026; with weeks starting Monday this week is 19–25 Oct
         $this->travelTo(Carbon::parse('2026-10-24 12:00'));

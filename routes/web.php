@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\ReportPdfController;
 use App\Http\Controllers\TransferInvoiceController;
 use App\Livewire;
 use Illuminate\Support\Facades\Route;
@@ -8,29 +9,6 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('guest')->group(function () {
     Route::get('/login', [LoginController::class, 'show'])->name('login');
     Route::post('/login', [LoginController::class, 'login'])->middleware('throttle:10,1');
-});
-
-Route::get('/clean-test-data', function () {
-    \Illuminate\Support\Facades\Schema::disableForeignKeyConstraints();
-    \App\Models\BatchItem::truncate();
-    \App\Models\Batch::truncate();
-    \App\Models\TransferItem::truncate();
-    \App\Models\Transfer::truncate();
-    \App\Models\PurchaseItem::truncate();
-    \App\Models\Purchase::truncate();
-    \App\Models\AdjustmentItem::truncate();
-    \App\Models\Adjustment::truncate();
-    \App\Models\BranchPayment::truncate();
-    \App\Models\ActivityLog::truncate();
-    \App\Models\Item::query()->update([
-        'stock_qty' => 0,
-        'avg_cost' => 0,
-        'last_price' => null,
-    ]);
-    \Illuminate\Support\Facades\Schema::enableForeignKeyConstraints();
-
-    session()->flash('success', 'Tamam testing data mukammal tor par clean ho gaya hai!');
-    return redirect('/');
 });
 
 Route::middleware('auth')->group(function () {
@@ -60,6 +38,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/batches/new', Livewire\Batches\Create::class)->name('batches.create');
     Route::get('/batches/{batch}', Livewire\Batches\Show::class)->name('batches.show');
 
+    Route::get('/reports', Livewire\Reports::class)->name('reports');
+    Route::get('/reports/pdf', ReportPdfController::class)->name('reports.pdf');
     Route::get('/analysis', Livewire\Analysis::class)->name('analysis');
     Route::get('/order-list', Livewire\OrderList::class)->name('order-list');
     Route::get('/activity', Livewire\ActivityLogPage::class)->name('activity');

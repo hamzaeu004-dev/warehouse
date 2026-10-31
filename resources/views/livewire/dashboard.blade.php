@@ -21,6 +21,38 @@
         <p class="hero-hint">{{ $itemsInStock }} of {{ $itemsTotal }} items in stock</p>
     </div>
 
+    {{-- Shown until the basics are in place --}}
+    @if (! $setup['branches'] || ! $setup['items'] || ! $setup['purchases'])
+        @php
+            $steps = [
+                ['done' => $setup['branches'] > 0, 'label' => 'Add your branches', 'hint' => 'Name, ATTN and address for the invoice', 'url' => route('branches')],
+                ['done' => $setup['items'] > 0, 'label' => 'Add your items', 'hint' => 'On the Stock page, or type them while making the first purchase', 'url' => route('items.index')],
+                ['done' => $setup['purchases'] > 0, 'label' => 'Enter the first purchase', 'hint' => 'Stock that arrived at the warehouse', 'url' => route('purchases.create')],
+            ];
+        @endphp
+        <div class="card ring-teal-200">
+            <h2 class="card-title">Get started</h2>
+            <p class="text-xs text-slate-500">Set up the app with your own data.</p>
+            <div class="mt-2">
+                @foreach ($steps as $i => $step)
+                    <a href="{{ $step['url'] }}" wire:navigate class="row-link -mx-4 flex items-center gap-3 border-t border-slate-100 px-4 py-3 first:border-0">
+                        <span class="flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-sm font-bold {{ $step['done'] ? 'bg-emerald-100 text-emerald-700' : 'bg-slate-100 text-slate-600' }}">
+                            @if ($step['done'])
+                                <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+                            @else
+                                {{ $i + 1 }}
+                            @endif
+                        </span>
+                        <span class="min-w-0">
+                            <span class="block text-sm font-semibold {{ $step['done'] ? 'text-slate-400 line-through' : 'text-slate-900' }}">{{ $step['label'] }}</span>
+                            <span class="block text-xs text-slate-500">{{ $step['hint'] }}</span>
+                        </span>
+                    </a>
+                @endforeach
+            </div>
+        </div>
+    @endif
+
     {{-- Main jobs, big enough for a thumb --}}
     <div class="grid grid-cols-2 gap-3">
         @foreach ($actions as $a)

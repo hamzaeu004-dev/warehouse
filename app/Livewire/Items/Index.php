@@ -42,6 +42,10 @@ class Index extends Component
     {
         $this->resetValidation();
         $this->reset('name');
+        // On a fresh start there are no categories yet, so give new items a home
+        if (! Category::exists()) {
+            Category::create(['name' => 'Other', 'sort_order' => 1]);
+        }
         $catId = $this->category ?? Category::orderBy('sort_order')->value('id');
         $this->category_id = $catId !== null ? (int) $catId : null;
         $this->showForm = true;

@@ -11,12 +11,9 @@ class DatabaseSeeder extends Seeder
 {
     public function run(): void
     {
+        // Only the login. Items, categories and branches are entered in the app;
+        // SampleDataSeeder has a sample list for tests and demos.
         $this->createManager();
-
-        $this->call([
-            ItemSeeder::class,
-            BranchSeeder::class,
-        ]);
     }
 
     /**

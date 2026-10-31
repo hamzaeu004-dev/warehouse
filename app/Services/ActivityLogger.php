@@ -14,6 +14,8 @@ class ActivityLogger
      */
     public static function record(string $action, string $description, ?Model $subject = null, array $properties = []): ActivityLog
     {
+        ActivityLog::pruneOld();
+
         return ActivityLog::create([
             'user_id' => auth()->id(),
             'action' => $action,

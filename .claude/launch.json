@@ -6,6 +6,13 @@
       "runtimeExecutable": "php",
       "runtimeArgs": ["artisan", "serve", "--port=8000"],
       "port": 8000
+    },
+    {
+      "name": "inventory-fresh",
+      "runtimeExecutable": "cmd",
+      "runtimeArgs": ["/c", "set DB_CONNECTION=sqlite&& set DB_DATABASE=C:/Users/E-TIME/AppData/Local/Temp/claude/E--inventory-system/63030fe8-6b77-41d2-95fe-8acaad6da029/scratchpad/fresh.sqlite&& set SESSION_DRIVER=file&& php artisan serve --host=127.0.0.1 --port=8002"],
+      "port": 8002,
+      "url": "http://127.0.0.1:8002"
     }
   ]
 }

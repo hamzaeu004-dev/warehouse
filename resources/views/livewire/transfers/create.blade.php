@@ -39,6 +39,11 @@
     <div class="card space-y-3">
         <div>
             <label class="label text-base font-bold text-slate-900">1. Select Destination Branch (Order From)</label>
+            @if ($branches->isEmpty())
+                <a href="{{ route('branches') }}" wire:navigate class="notice-warn row-link hover:bg-amber-100">
+                    <span><b>No branches yet.</b> Add your branches first, then come back to send stock.</span>
+                </a>
+            @endif
             <div class="grid grid-cols-3 gap-2">
                 @foreach ($branches as $branch)
                     <label class="cursor-pointer">

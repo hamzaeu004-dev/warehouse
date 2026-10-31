@@ -21,9 +21,11 @@
 @endphp
 
 <div class="space-y-3">
+    <p class="text-xs text-slate-500">Logs are kept for the last {{ \App\Models\ActivityLog::KEEP_DAYS }} days, then removed automatically.</p>
+
     <div class="flex gap-2">
         <input wire:model.live.debounce.300ms="search" type="search" class="input" placeholder="Search, e.g. oil, Branch 1, deleted...">
-        <input wire:model.live="date" type="date" max="{{ now()->toDateString() }}" class="input w-auto shrink-0 px-2 text-sm" aria-label="Filter by date">
+        <input wire:model.live="date" type="date" min="{{ now()->subDays(\App\Models\ActivityLog::KEEP_DAYS)->toDateString() }}" max="{{ now()->toDateString() }}" class="input w-auto shrink-0 px-2 text-sm" aria-label="Filter by date">
     </div>
 
     <div class="-mx-4 flex gap-2 overflow-x-auto px-4 pb-1">

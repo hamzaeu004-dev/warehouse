@@ -8,6 +8,7 @@ use App\Models\User;
 use App\Services\ProfitReport;
 use App\Services\StockService;
 use Database\Seeders\DatabaseSeeder;
+use Database\Seeders\SampleDataSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Carbon;
 use Tests\TestCase;
@@ -25,7 +26,7 @@ class ProfitOnPaymentsTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->seed(DatabaseSeeder::class);
+        $this->seed([DatabaseSeeder::class, SampleDataSeeder::class]);
         $this->actingAs(User::first());
         $this->travelTo(Carbon::parse('2026-10-24 12:00'));
 

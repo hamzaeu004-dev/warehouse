@@ -39,13 +39,27 @@
         <button class="btn-primary w-full">Save password</button>
     </form>
 
-    <div class="card space-y-3" x-data @clear-browser-drafts.window="localStorage.clear()">
-        <h2 class="font-semibold text-slate-900">Database & Test Data</h2>
-        <p class="text-xs text-slate-500">
-            Agar aap ne testing ke doraan purchases, invoices, batches ya adjustments enter kiye the, unhein saaf kar ke stock 0 kar sakte hain. Items aur branches mehfooz rahein gi.
-        </p>
-        <button wire:click="cleanTestData" wire:confirm="Kya aap waqai tamam testing transactions (Invoices, Purchases, Batches, Adjustments) delete kar ke stock 0 karna chahte hain?" class="btn-light w-full text-red-600 hover:bg-red-50">
-            Clean All Testing Data
+    {{-- Clearing test data: needs the password, two levels --}}
+    <div class="card space-y-3 ring-red-200" x-data @clear-browser-drafts.window="try { localStorage.clear() } catch (e) {}">
+        <div>
+            <h2 class="card-title">Start fresh</h2>
+            <p class="mt-1 text-sm text-slate-500">Remove test data before using the app for real. Your login stays. This cannot be undone.</p>
+        </div>
+        <div>
+            <label class="label" for="reset_password">Your password</label>
+            <input id="reset_password" wire:model="reset_password" type="password" autocomplete="current-password" class="input" placeholder="Needed to confirm">
+            @error('reset_password') <p class="field-error">{{ $message }}</p> @enderror
+        </div>
+        <button wire:click="resetData('transactions')"
+                wire:confirm="Delete all batches, purchases, invoices, adjustments and payments, and set every item's stock to 0? Items, categories and branches are kept."
+                class="btn-light w-full text-red-600 hover:bg-red-50">
+            Clear transactions only
         </button>
+        <button wire:click="resetData('everything')"
+                wire:confirm="Delete EVERYTHING except your login: all items, categories, branches, purchases, invoices and payments? You will add them again by hand."
+                class="btn-danger w-full">
+            Delete everything and start empty
+        </button>
+        <p class="text-xs text-slate-500"><b>Transactions only:</b> keeps your item list and branches. <b>Everything:</b> also removes items, categories and branches.</p>
     </div>
 </div>

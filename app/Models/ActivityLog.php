@@ -9,6 +9,9 @@ class ActivityLog extends Model
 {
     public const UPDATED_AT = null;
 
+    // Logs are temporary: anything older than this is deleted automatically
+    public const KEEP_DAYS = 7;
+
     // Filter groups on the Activity Log page, keyed by the action prefix
     public const GROUPS = [
         'purchase' => 'Purchases',
@@ -30,6 +33,15 @@ class ActivityLog extends Model
             'properties' => 'array',
             'created_at' => 'datetime',
         ];
+    }
+
+    /**
+     * Deletes logs older than KEEP_DAYS. Runs when a log is written or the
+     * log page opens, so it works on hosting without a cron job.
+     */
+    public static function pruneOld(): int
+    {
+        return static::where('created_at', '<', now()->subDays(self::KEEP_DAYS)->startOfDay())->delete();
     }
 
     public function user(): BelongsTo

@@ -30,6 +30,12 @@ class Dashboard extends Component
             'stockValue' => (float) Item::sum(DB::raw('stock_qty * avg_cost')),
             'itemsInStock' => Item::where('is_active', true)->where('stock_qty', '>', 0)->count(),
             'itemsTotal' => Item::where('is_active', true)->count(),
+            // First-run checklist after starting with an empty database
+            'setup' => [
+                'branches' => Branch::count(),
+                'items' => Item::count(),
+                'purchases' => Purchase::count(),
+            ],
             'weekPurchases' => (float) Purchase::where('purchase_date', '>=', $weekStart)->sum('total'),
             'monthPurchases' => (float) Purchase::where('purchase_date', '>=', $monthStart)->sum('total'),
             'monthLoss' => (float) Adjustment::where('adjustment_date', '>=', $monthStart)->where('total_value', '<', 0)->sum('total_value'),
@@ -43,12 +49,12 @@ class Dashboard extends Component
             'totalPurchasesCount' => Purchase::count(),
             'orderCount' => OrderPlanner::suggestions()->where('suggested', '>', 0)->count(),
             'weekProfit' => ProfitReport::totals(...ProfitReport::range('week', now())),
+            'recentBatches' => Batch::withCount('lines')->latest('batch_date')->latest('id')->limit(3)->get(),
+            'totalBatchesCount' => Batch::count(),
             'recentActivity' => ActivityLog::latest('created_at')->latest('id')->limit(3)->get(),
             'totalActivityCount' => ActivityLog::count(),
             'recentTransfers' => Transfer::with('branch')->withCount('lines')->latest('transfer_date')->latest('id')->limit(3)->get(),
             'totalTransfersCount' => Transfer::count(),
-            'recentBatches' => Batch::withCount('lines')->latest('batch_date')->latest('id')->limit(3)->get(),
-            'totalBatchesCount' => Batch::count(),
         ]);
     }
 }

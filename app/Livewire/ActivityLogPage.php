@@ -42,6 +42,11 @@ class ActivityLogPage extends Component
         $this->perPage = 50;
     }
 
+    public function mount(): void
+    {
+        ActivityLog::pruneOld();
+    }
+
     public function render()
     {
         $query = ActivityLog::query()

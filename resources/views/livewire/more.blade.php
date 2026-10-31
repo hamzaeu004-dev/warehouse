@@ -1,6 +1,7 @@
 @php
     $groups = [
         'Reports' => [
+            ['url' => route('reports'), 'label' => 'Owner report (PDF)', 'hint' => 'Purchases, deliveries and wastage to download or share', 'color' => 'bg-rose-100 text-rose-700', 'icon' => 'M12 10v6m0 0l-3-3m3 3l3-3M7 21h10a2 2 0 002-2V9.4a1 1 0 00-.3-.7l-5.4-5.4a1 1 0 00-.7-.3H7a2 2 0 00-2 2v14a2 2 0 002 2z'],
             ['url' => route('analysis'), 'label' => 'Analysis', 'hint' => 'Profit and investment: daily, weekly, monthly, yearly', 'color' => 'bg-emerald-100 text-emerald-700', 'icon' => 'M3 3v18h18M7 15l4-4 3 3 5-6'],
             ['url' => route('order-list'), 'label' => 'Order list', 'hint' => 'What to buy this week', 'color' => 'bg-violet-100 text-violet-700', 'icon' => 'M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4'],
             ['url' => route('activity'), 'label' => 'Activity log', 'hint' => 'Everything that happened in the system', 'color' => 'bg-slate-200 text-slate-700', 'icon' => 'M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z'],
@@ -38,18 +39,6 @@
             </div>
         </div>
     @endforeach
-
-    <div class="card p-3.5 bg-red-50/80 border border-red-200">
-        <div class="flex items-center justify-between gap-3">
-            <div>
-                <p class="text-sm font-bold text-red-900">Clean Testing Data</p>
-                <p class="text-xs text-red-700 mt-0.5">Purchases, invoices, batches aur adjustments delete hon ge, stock 0 ho jaye ga.</p>
-            </div>
-            <a href="/clean-test-data" onclick="localStorage.clear(); return confirm('Kya aap waqai tamam testing transactions delete kar ke stock 0 karna chahte hain?')" class="shrink-0 rounded-xl bg-red-600 px-3.5 py-2 text-xs font-bold text-white shadow-sm hover:bg-red-700 transition">
-                Clean Now
-            </a>
-        </div>
-    </div>
 
     <form method="POST" action="{{ route('logout') }}">
         @csrf

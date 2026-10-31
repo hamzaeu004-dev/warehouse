@@ -13,6 +13,12 @@ class Branches extends Component
 {
     public string $newName = '';
 
+    public string $newContact = '';
+
+    public string $newAddress = '';
+
+    public string $newPhone = '';
+
     public ?int $editingId = null;
 
     public string $editName = '';
@@ -25,10 +31,22 @@ class Branches extends Component
 
     public function add(): void
     {
-        $this->validate(['newName' => ['required', 'string', 'max:100', 'unique:branches,name']], [], ['newName' => 'branch name']);
-        $branch = Branch::create(['name' => trim($this->newName)]);
-        ActivityLogger::record('branch.created', "Branch added: {$branch->name}", $branch);
-        $this->reset('newName');
+        $this->validate([
+            'newName' => ['required', 'string', 'max:100', 'unique:branches,name'],
+            'newContact' => ['nullable', 'string', 'max:100'],
+            'newAddress' => ['nullable', 'string', 'max:255'],
+            'newPhone' => ['nullable', 'string', 'max:30'],
+        ], ['newName.unique' => 'A branch with this name already exists.'], ['newName' => 'branch name']);
+
+        $branch = Branch::create([
+            'name' => trim($this->newName),
+            'contact_person' => trim($this->newContact) ?: null,
+            'address' => trim($this->newAddress) ?: null,
+            'phone' => trim($this->newPhone) ?: null,
+        ]);
+        ActivityLogger::record('branch.created', "Branch added: {$branch->name}".($branch->contact_person ? " (ATTN {$branch->contact_person})" : ''), $branch);
+        $this->reset('newName', 'newContact', 'newAddress', 'newPhone');
+        session()->flash('success', "{$branch->name} added.");
     }
 
     public function edit(int $id): void

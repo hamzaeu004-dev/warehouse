@@ -11,8 +11,10 @@ use App\Models\ActivityLog;
 use App\Models\Branch;
 use App\Models\Item;
 use App\Models\User;
+use App\Services\ActivityLogger;
 use App\Services\StockService;
 use Database\Seeders\DatabaseSeeder;
+use Database\Seeders\SampleDataSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Livewire\Livewire;
 use Tests\TestCase;
@@ -24,7 +26,7 @@ class ActivityLogTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->seed(DatabaseSeeder::class);
+        $this->seed([DatabaseSeeder::class, SampleDataSeeder::class]);
     }
 
     private function latest(): ActivityLog
@@ -150,6 +152,27 @@ class ActivityLogTest extends TestCase
             ->assertSee('No activity found.');
 
         $this->get('/')->assertSee('Recent activity')->assertSee("Purchase #{$gone->id} deleted");
+    }
+
+    public function test_logs_older_than_a_week_are_removed_automatically(): void
+    {
+        $this->actingAs(User::first());
+        $this->travelTo(now()->setTime(12, 0));
+        $old = ActivityLog::create(['action' => 'account.login', 'description' => 'Eight days ago']);
+        $old->forceFill(['created_at' => now()->subDays(8)])->save();
+        $edge = ActivityLog::create(['action' => 'account.login', 'description' => 'Seven days ago']);
+        $edge->forceFill(['created_at' => now()->subDays(7)])->save();
+
+        // Writing a new log clears the old one
+        ActivityLogger::record('account.login', 'Logged in today');
+        $this->assertModelMissing($old);
+        $this->assertModelExists($edge);
+
+        // So does opening the log page, even if nothing new was written
+        $this->travel(1)->days();
+        $this->get('/activity')->assertOk()->assertSee('kept for the last 7 days')->assertDontSee('Seven days ago');
+        $this->assertModelMissing($edge);
+        $this->assertSame(1, ActivityLog::count());
     }
 
     public function test_log_page_needs_login(): void

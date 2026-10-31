@@ -34,6 +34,7 @@
             'batches.show' => 'batches.index',
             'activity' => 'more',
             'analysis' => 'dashboard',
+            'reports' => 'more',
             'order-list' => 'dashboard',
             'branches' => 'more',
             'categories' => 'items.index',
@@ -91,7 +92,7 @@
             ['route' => 'items.index', 'match' => ['items.*', 'categories'], 'label' => 'Stock', 'icon' => 'M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4'],
             ['route' => 'purchases.create', 'match' => 'purchases.*', 'label' => 'Purchase', 'icon' => 'M12 4v16m8-8H4'],
             ['route' => 'transfers.create', 'match' => 'transfers.*', 'label' => 'Send', 'icon' => 'M9 17h6M9 13h6M9 9h1m-4 12h12a2 2 0 002-2V7.4a2 2 0 00-.6-1.4l-3.4-3.4a2 2 0 00-1.4-.6H6a2 2 0 00-2 2v15a2 2 0 002 2z'],
-            ['route' => 'more', 'match' => ['more', 'branches', 'branches.show', 'account', 'adjustments.*', 'batches.*', 'activity'], 'label' => 'More', 'icon' => 'M4 6h16M4 12h16M4 18h16'],
+            ['route' => 'more', 'match' => ['more', 'branches', 'branches.show', 'account', 'adjustments.*', 'batches.*', 'activity', 'reports'], 'label' => 'More', 'icon' => 'M4 6h16M4 12h16M4 18h16'],
         ];
     @endphp
     <nav class="fixed inset-x-0 bottom-0 z-30 border-t border-slate-200/80 bg-white/95 pb-[env(safe-area-inset-bottom)] backdrop-blur">

@@ -1,7 +1,15 @@
 <div class="space-y-4">
     @error('delete') <div class="notice-error">{{ $message }}</div> @enderror
 
-    <div class="card divide-y divide-slate-100 p-0">
+    @if ($branches->isEmpty())
+        <div class="empty-state">
+            <svg class="h-10 w-10 text-slate-300" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 21h18M5 21V7l7-4 7 4v14M9 21v-6h6v6"/></svg>
+            <p class="font-medium text-slate-700">No branches yet</p>
+            <p>Add each restaurant branch below. You need at least one before you can send stock.</p>
+        </div>
+    @endif
+
+    <div class="card divide-y divide-slate-100 p-0 {{ $branches->isEmpty() ? 'hidden' : '' }}">
         @foreach ($branches as $branch)
             <div class="px-4 py-3" wire:key="branch-{{ $branch->id }}">
                 @if ($editingId === $branch->id)
@@ -49,12 +57,30 @@
         @endforeach
     </div>
 
-    <form wire:submit="add" class="card space-y-2">
-        <label class="label">New branch</label>
-        <div class="flex gap-2">
-            <input wire:model="newName" class="input" placeholder="Branch name">
-            <button class="btn-primary px-4">Add</button>
+    <form wire:submit="add" class="card space-y-3">
+        <div>
+            <h2 class="card-title">Add a branch</h2>
+            <p class="text-xs text-slate-500">These details are printed on the invoice under "Deliver To".</p>
         </div>
-        @error('newName') <p class="text-sm text-red-600">{{ $message }}</p> @enderror
+        <div>
+            <label class="label" for="newName">Branch name</label>
+            <input id="newName" wire:model="newName" class="input" placeholder="e.g. ROOSTERS - RAHEEM GARDEN">
+            @error('newName') <p class="field-error">{{ $message }}</p> @enderror
+        </div>
+        <div class="grid grid-cols-2 gap-3">
+            <div>
+                <label class="label" for="newContact">Contact (ATTN)</label>
+                <input id="newContact" wire:model="newContact" class="input" placeholder="e.g. Abdul Mateen">
+            </div>
+            <div>
+                <label class="label" for="newPhone">Phone</label>
+                <input id="newPhone" wire:model="newPhone" inputmode="tel" class="input" placeholder="Optional">
+            </div>
+        </div>
+        <div>
+            <label class="label" for="newAddress">Address</label>
+            <input id="newAddress" wire:model="newAddress" class="input" placeholder="e.g. Raheem Garden G.T Road">
+        </div>
+        <button class="btn-primary w-full">+ Add branch</button>
     </form>
 </div>

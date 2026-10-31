@@ -3,6 +3,7 @@
 namespace App\Livewire;
 
 use App\Services\ActivityLogger;
+use App\Services\DataReset;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules\Password;
 use Livewire\Attributes\Title;
@@ -66,28 +67,30 @@ class Account extends Component
         session()->flash('success', 'Password changed.');
     }
 
-    public function cleanTestData(): void
-    {
-        \Illuminate\Support\Facades\Schema::disableForeignKeyConstraints();
-        \App\Models\BatchItem::truncate();
-        \App\Models\Batch::truncate();
-        \App\Models\TransferItem::truncate();
-        \App\Models\Transfer::truncate();
-        \App\Models\PurchaseItem::truncate();
-        \App\Models\Purchase::truncate();
-        \App\Models\AdjustmentItem::truncate();
-        \App\Models\Adjustment::truncate();
-        \App\Models\BranchPayment::truncate();
-        \App\Models\ActivityLog::truncate();
-        \App\Models\Item::query()->update([
-            'stock_qty' => 0,
-            'avg_cost' => 0,
-            'last_price' => null,
-        ]);
-        \Illuminate\Support\Facades\Schema::enableForeignKeyConstraints();
+    public string $reset_password = '';
 
+    /**
+     * Clears test data. transactions keeps items, categories and branches;
+     * everything removes those too. Needs the current password.
+     */
+    public function resetData(string $scope): void
+    {
+        $this->validate(
+            ['reset_password' => ['required', 'current_password']],
+            ['reset_password.required' => 'Enter your password to confirm.', 'reset_password.current_password' => 'Password is incorrect.']
+        );
+
+        if ($scope === 'everything') {
+            DataReset::everything();
+            session()->flash('success', 'All data cleared. Add your branches and items to start.');
+        } else {
+            DataReset::transactions();
+            session()->flash('success', 'Test transactions cleared. Stock is 0; items and branches are kept.');
+        }
+
+        $this->reset('reset_password');
         $this->dispatch('clear-browser-drafts');
-        session()->flash('success', 'Tamam testing transactions saaf kar di gayi hain aur item stock 0 ho gaya hai.');
+        $this->redirectRoute('dashboard', navigate: true);
     }
 
     public function render()

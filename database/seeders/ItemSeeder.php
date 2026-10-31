@@ -9,8 +9,8 @@ use Illuminate\Database\Seeder;
 class ItemSeeder extends Seeder
 {
     /**
-     * Item list from the manager. Units are a best guess and can be
-     * changed from the Items page.
+     * Sample item list (the first list the manager shared), run only through
+     * SampleDataSeeder for tests and demos; real items are added in the app.
      */
     public function run(): void
     {

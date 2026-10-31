@@ -10,6 +10,7 @@ use App\Models\Item;
 use App\Models\User;
 use App\Services\StockService;
 use Database\Seeders\DatabaseSeeder;
+use Database\Seeders\SampleDataSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Livewire\Livewire;
 use Tests\TestCase;
@@ -23,7 +24,7 @@ class AdjustmentTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->seed(DatabaseSeeder::class);
+        $this->seed([DatabaseSeeder::class, SampleDataSeeder::class]);
         $this->actingAs(User::first());
 
         $this->oil = Item::where('name', 'Frying oil')->first();
